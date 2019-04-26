@@ -20,16 +20,15 @@ public class SkipListTests {
   /**
    * Names of some numbers.
    */
-  static final String numbers[] =
-      {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
-          "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-          "sixteen", "seventeen", "eighteen", "nineteen"};
+  static final String numbers[] = {"zero", "one", "two", "three", "four", "five", "six", "seven",
+      "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+      "seventeen", "eighteen", "nineteen"};
 
   /**
    * Names of more numbers.
    */
-  static final String tens[] = {"", "", "twenty", "thirty", "forty", "fifty",
-      "sixty", "seventy", "eighty", "ninety"};
+  static final String tens[] =
+      {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
 
   // +--------+----------------------------------------------------------
   // | Fields |
@@ -62,23 +61,22 @@ public class SkipListTests {
   // +---------+
 
   /**
-   * Set up everything.  Unfortunately, @BeforeEach doesn't seem
-   * to be working, so we do this manually.
+   * Set up everything. Unfortunately, @BeforeEach doesn't seem to be working, so we do this
+   * manually.
    */
   @BeforeEach
   public void setup() {
     this.ints = new SkipList<Integer, String>((i, j) -> i - j);
     this.strings = new SkipList<String, String>((s, t) -> s.compareTo(t));
     this.operations = new ArrayList<String>();
-    System.err.println("SETUP");
   } // setup
 
   /**
    * Dump a SkipList to stderr.
    */
-  static <K,V> void dump(SkipList<K,V> map) {
+  static <K, V> void dump(SkipList<K, V> map) {
     System.err.print("[");
-    map.forEach((key,value) -> System.err.println(key + ":" + value + " "));
+    map.forEach((key, value) -> System.err.println(key + ":" + value + " "));
     System.err.println("]");
   } // dump
 
@@ -146,20 +144,20 @@ public class SkipListTests {
   // +--------------------+
 
   /**
-   * Add an integer to the ints list.
+   * Set an entry in the ints list.
    */
   void set(Integer i) {
     operations.add("set(" + i + ");");
     ints.set(i, value(i));
-  } // add
+  } // set(Integer)
 
   /**
-   * Add a string to the strings list.
+   * Set an entry in the strings list.
    */
   void set(String str) {
     operations.add("set(\"" + str + "\");");
     strings.set(str, value(str));
-  } // add(String)
+  } // set(String)
 
   /**
    * Remove an integer from the ints list.
@@ -172,7 +170,7 @@ public class SkipListTests {
   /**
    * Remove a string from the strings list.
    */
-  void add(String str) {
+  void remove(String str) {
     operations.add("remove(\"" + str + "\");");
     strings.remove(str);
   } // remove(String)
@@ -203,7 +201,7 @@ public class SkipListTests {
   // +-------------+
 
   /**
-   * A really simple test.  Add an element and make sure that it's there.
+   * A really simple test. Add an element and make sure that it's there.
    */
   @Test
   public void simpleTest() {
@@ -245,6 +243,154 @@ public class SkipListTests {
       fail("The instructions did not produce a sorted list.");
     } // if the elements are not in order.
   } // testOrdered()
+
+
+  @Test
+  public void schuffleAdd() {
+    setup();
+    int value = 100;
+    for (int i = 0; i < 20; i++) {
+      set(value);
+      int rand = random.nextInt(value);
+      set(rand);
+      int rand2 = random.nextInt(value) + value;
+      set(rand2);
+      value = value * (random.nextInt(3) + 1) / (random.nextInt(3) + 1);
+      if (value <= 0) {
+        value = 100;
+      }
+    }
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    } // if the elements are not in order.
+  }
+  
+  @Test
+  public void removeFront() {
+    setup();
+    int max = 0;
+    for (int i = 0; i < 50; i++) {
+      int rand = random.nextInt(200);
+      max = Math.max(max, rand);
+      set(rand);
+    }
+    remove(max);
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    }
+    if (ints.containsKey(max)) {
+      log("After removing " + max + ", contains(" + max + ") succeeds");
+    }
+  }
+
+  @Test
+  public void removeBack() {
+    setup();
+    int min = 0;
+    for (int i = 0; i < 50; i++) {
+      int rand = random.nextInt(200);
+      min = Math.min(min, rand);
+      set(rand);
+    }
+    remove(min);
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    }
+    if (ints.containsKey(min)) {
+      log("After removing " + min + ", contains(" + min + ") succeeds");
+    }
+  }
+
+  @Test
+  public void checkBigEverythingIncluded() {
+    setup();
+    int[] arr = new int[1000];
+    for (int i = 0; i < 1000; i++) {
+      int rand = random.nextInt(10000);
+      set(rand);
+      arr[i] = rand;
+    }
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    }
+    for (int i = 0; i < 1000; i++) {
+      if (!ints.containsKey(arr[i])) {
+        log("contains(" + arr[i] + ") failed");
+        printTest();
+        dump(ints);
+        fail(arr[i] + " is not in the skip list");
+      }
+    }
+  }
+
+  @Test
+  public void randomSetandRemove() {
+    setup();
+    for (int i = 0; i < 500; i++) {
+      int rand = random.nextInt(2);
+      int randVal = random.nextInt(10000);
+      ArrayList<Integer> arr = new ArrayList<Integer>();
+      if (rand == 0) {
+        set(randVal);
+        arr.add(randVal);
+      }
+      else {
+        if (arr.size() <= 0) {
+        } else {
+        int randInd = random.nextInt(arr.size() - 1);
+        remove(arr.get(randInd));
+        arr.remove(arr.get(randInd));
+        }
+      }
+    }
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    }
+  }
+
+  @Test
+  public void addThenRemoveTillEmpty() {
+    setup();
+    int[] arr = new int[50];
+    for (int i = 0; i < 50; i++) {
+      int rand = random.nextInt(200);
+      set(rand);
+      arr[i] = rand;
+    }
+    if (!inOrder(ints.keys())) {
+      System.err.println("inOrder() failed in testOrdered()");
+      printTest();
+      dump(ints);
+      System.err.println();
+      fail("The instructions did not produce a sorted list.");
+    }
+    for (int i = 0; i < 50; i++) {
+      remove(arr[i]);
+    }
+    if (ints.front.get(0) != null) {
+      fail("The operation did not remove all the nodes.");
+    }
+  }
 
   /**
    * Verify that a randomly created list contains all the values we added to the list.
@@ -290,7 +436,7 @@ public class SkipListTests {
           set(rand);
         } // if it's not already there.
         if (!ints.containsKey(rand)) {
-          log("After adding " + rand + ", contains(" + rand +") fails");
+          log("After adding " + rand + ", contains(" + rand + ") fails");
           ok = false;
         } // if (!ints.contains(rand))
       } // if we add
@@ -299,7 +445,7 @@ public class SkipListTests {
         remove(rand);
         keys.remove((Integer) rand);
         if (ints.containsKey(rand)) {
-          log("After removing " + rand + ", contains(" + rand +") succeeds");
+          log("After removing " + rand + ", contains(" + rand + ") succeeds");
           ok = false;
         } // if ints.contains(rand)
       } // if we remove
@@ -319,10 +465,11 @@ public class SkipListTests {
       fail("Operations failed");
     } // if (!ok)
   } // randomTest()
-  
+
   public static void main(String[] args) {
     SkipListTests slt = new SkipListTests();
     slt.setup();
     slt.simpleTest();
   } // main
 } // class SkipListTests
+
