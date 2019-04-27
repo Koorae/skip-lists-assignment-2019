@@ -55,7 +55,9 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
    */
   double prob = 0.5;
 
-  
+  /**
+   * Counts the time spent by the function.
+   */
   int stepCounter;
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -85,7 +87,12 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
   // +-------------------+-------------------------------------------
   // | SimpleMap methods |
   // +-------------------+
-
+  
+  /**
+   * Inserts a node or changes the value of the node according to the provided key in the SkipList
+   * 
+   * @precondition: key and value cannot be null
+   */
   @Override
   public V set(K key, V value) {
     stepCounter = 0;
@@ -109,7 +116,6 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
       } // for
       while (level > 0 && (curr == null || comparator.compare(curr.key, key) > 0)) {
         curr = this.front.get(--level);
-        stepCounter++;
       }
       if (comparator.compare(curr.key, key) == 0) {
         V rVal = curr.value;
@@ -117,13 +123,11 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
         return rVal;
       } else if (comparator.compare(curr.key, key) > 0) {
         level--;
-        stepCounter++;
       }
       while (level >= 0) {
         if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) > 0) {
           prevStorage.set(level, curr);
           level = level - 1;
-          stepCounter++;
         } else if (comparator.compare(curr.next(level).key, key) < 0) {
           curr = curr.next(level);
           stepCounter++;
@@ -150,6 +154,13 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     return null;
   } // set(K,V)
 
+  /**
+   * Returns the value of a node given the key. However, 
+   * if the key doesn't match anything that exists in the 
+   * SkipList. 
+   * 
+   * @precondition: key cannot be null
+   */
   @Override
   public V get(K key) {
     stepCounter = 0;
@@ -163,18 +174,15 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     SLNode<K, V> curr = this.front.get(level);
     while (level > 0 && (curr == null || comparator.compare(curr.key, key) > 0)) {
       curr = this.front.get(--level);
-      stepCounter++;
     }
     if (comparator.compare(curr.key, key) == 0) {
       return curr.value;
     } else if (comparator.compare(curr.key, key) > 0) {
       level--;
-      stepCounter++;
     }
     while (level >= 0) {
       if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) > 0) {
         level--;
-        stepCounter++;
       } else if (comparator.compare(curr.next(level).key, key) < 0) {
         curr = curr.next(level);
         stepCounter++;
@@ -185,19 +193,17 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     throw new IndexOutOfBoundsException("OutOfBounds");
   } // get(K,V)
 
+  /**
+   * Returns the size of the SkipList
+   */
   @Override
   public int size() {
     return this.size;
   } // size()
 
-  public void printList() {
-    SLNode<K, V> curr = this.front.get(0);
-    while (curr != null) {
-      System.out.println(curr.key + " " + curr.next.size());
-      curr = curr.next(0);
-    }
-  }
-
+  /**
+   * Checks whether a key exists in the SkipList
+   */
   @Override
   public boolean containsKey(K key) {
     try {
@@ -210,6 +216,12 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     }
   } // containsKey(K)
 
+  /**
+   * Removes the given node that contains the key from the SkipList.
+   * 
+   * @precondition: key cannot be null
+   * @postcondition: returns the value of the removed value or return null if not found
+   */
   @Override
   public V remove(K key) {
     stepCounter = 0;
@@ -227,7 +239,6 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     }
     while (level > 0 && (curr == null || comparator.compare(curr.key, key) >= 0)) {
       curr = this.front.get(--level);
-      stepCounter++;
     }
     if (comparator.compare(curr.key, key) > 0) {
       return null;
@@ -243,7 +254,6 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
       if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) >= 0) {
         prevStorage.set(level, curr);
         level = level - 1;
-        stepCounter++;
       } else if (comparator.compare(curr.next(level).key, key) < 0) {
         curr = curr.next(level);
         stepCounter++;

@@ -244,7 +244,9 @@ public class SkipListTests {
     } // if the elements are not in order.
   } // testOrdered()
 
-
+  /**
+   * Adds elements in schuffling order and see if they are still in order.
+   */
   @Test
   public void schuffleAdd() {
     setup();
@@ -269,6 +271,9 @@ public class SkipListTests {
     } // if the elements are not in order.
   }
   
+  /**
+   * Removes the front node of the SkipList and see if it succeeds
+   */
   @Test
   public void removeFront() {
     setup();
@@ -290,7 +295,10 @@ public class SkipListTests {
       log("After removing " + max + ", contains(" + max + ") succeeds");
     }
   }
-
+  
+  /**
+   * Removes the back node of the SkipList and see if it succeeds
+   */
   @Test
   public void removeBack() {
     setup();
@@ -312,7 +320,10 @@ public class SkipListTests {
       log("After removing " + min + ", contains(" + min + ") succeeds");
     }
   }
-
+  
+  /**
+   * Add a thousand large elements and check whether all of them are contained in SkipList
+   */
   @Test
   public void checkBigEverythingIncluded() {
     setup();
@@ -339,6 +350,9 @@ public class SkipListTests {
     }
   }
 
+  /**
+   * Randomly set new nodes and remove existing nodes in the SkipList. 
+   */
   @Test
   public void randomSetandRemove() {
     setup();
@@ -368,6 +382,9 @@ public class SkipListTests {
     }
   }
 
+  /**
+   * Add 50 nodes to the Skiplist and remvoe them all and check if its empty
+   */
   @Test
   public void addThenRemoveTillEmpty() {
     setup();

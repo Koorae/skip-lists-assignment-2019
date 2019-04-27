@@ -1,0 +1,174 @@
+Length: 10
+
+Trial1
+
+SetExp:
+248
+GetExp:
+231
+RemoveExp:
+231
+
+Trial2
+
+SetExp:
+261
+GetExp:
+234
+RemoveExp:
+234
+
+Trial3
+
+SetExp:
+263
+GetExp:
+234
+RemoveExp:
+234
+
+
+Averages:
+SetAverage: 257
+GetAverage: 233
+RemAverage: 233
+
+Length: 100
+
+Trial1
+
+SetExp:
+2227
+GetExp:
+2158
+RemoveExp:
+2158
+
+Trial2
+
+SetExp:
+2193
+GetExp:
+2174
+RemoveExp:
+2174
+
+Trial3
+
+SetExp:
+2237
+GetExp:
+2225
+RemoveExp:
+2225
+
+
+Averages:
+SetAverage: 2219
+GetAverage: 2185
+RemAverage: 2185
+
+Length: 500
+
+Trial1
+
+SetExp:
+11189
+GetExp:
+11011
+RemoveExp:
+11011
+
+Trial2
+
+SetExp:
+11070
+GetExp:
+11038
+RemoveExp:
+11038
+
+Trial3
+
+SetExp:
+11153
+GetExp:
+11048
+RemoveExp:
+11048
+
+
+Averages:
+SetAverage: 11137
+GetAverage: 11032
+RemAverage: 11032
+
+Length: 1000
+
+Trial1
+
+SetExp:
+21441
+GetExp:
+21238
+RemoveExp:
+21238
+
+Trial2
+
+SetExp:
+21465
+GetExp:
+21238
+RemoveExp:
+21238
+
+Trial3
+
+SetExp:
+21514
+GetExp:
+21238
+RemoveExp:
+21238
+
+
+Averages:
+SetAverage: 21473
+GetAverage: 21238
+RemAverage: 21238
+
+Length: 10000
+
+Trial1
+
+SetExp:
+226279
+GetExp:
+225974
+RemoveExp:
+225974
+
+Trial2
+
+SetExp:
+225786
+GetExp:
+225974
+RemoveExp:
+225974
+
+Trial3
+
+SetExp:
+225006
+GetExp:
+225974
+RemoveExp:
+225974
+
+
+Averages:
+SetAverage: 225690
+GetAverage: 225974
+RemAverage: 225974

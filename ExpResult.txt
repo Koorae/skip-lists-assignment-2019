@@ -1,0 +1,35 @@
+Length: 100
+
+Trial1
+
+SetExp:
+771
+GetExp:
+673
+RemoveExp:
+673
+
+Trial2
+
+SetExp:
+912
+GetExp:
+847
+RemoveExp:
+847
+
+Trial3
+
+SetExp:
+957
+GetExp:
+911
+RemoveExp:
+911
+
+
+Averages:
+SetAverage: 880
+GetAverage: 810
+RemAverage: 810
+
