@@ -257,7 +257,7 @@ public class SkipListTests {
       set(rand);
       int rand2 = random.nextInt(value) + value;
       set(rand2);
-      value = value * (random.nextInt(3) + 1) / (random.nextInt(3) + 1);
+      value = value * (random.nextInt(2) + 1) / (random.nextInt(2) + 1);
       if (value <= 0) {
         value = 100;
       }
@@ -269,8 +269,8 @@ public class SkipListTests {
       System.err.println();
       fail("The instructions did not produce a sorted list.");
     } // if the elements are not in order.
-  }
-  
+  } // test scuffleAdd()
+
   /**
    * Removes the front node of the SkipList and see if it succeeds
    */
@@ -290,12 +290,12 @@ public class SkipListTests {
       dump(ints);
       System.err.println();
       fail("The instructions did not produce a sorted list.");
-    }
+    } // Make sure in order
     if (ints.containsKey(max)) {
       log("After removing " + max + ", contains(" + max + ") succeeds");
-    }
-  }
-  
+    } // Make sure the removed node is not there
+  } // test removeFront()
+
   /**
    * Removes the back node of the SkipList and see if it succeeds
    */
@@ -315,12 +315,12 @@ public class SkipListTests {
       dump(ints);
       System.err.println();
       fail("The instructions did not produce a sorted list.");
-    }
+    } // Make sure in order
     if (ints.containsKey(min)) {
       log("After removing " + min + ", contains(" + min + ") succeeds");
-    }
-  }
-  
+    } // Make sure the removed node is not there
+  } // test removeBack()
+
   /**
    * Add a thousand large elements and check whether all of them are contained in SkipList
    */
@@ -339,7 +339,7 @@ public class SkipListTests {
       dump(ints);
       System.err.println();
       fail("The instructions did not produce a sorted list.");
-    }
+    } // Make sure in order
     for (int i = 0; i < 1000; i++) {
       if (!ints.containsKey(arr[i])) {
         log("contains(" + arr[i] + ") failed");
@@ -347,11 +347,11 @@ public class SkipListTests {
         dump(ints);
         fail(arr[i] + " is not in the skip list");
       }
-    }
-  }
+    } // check everything is included
+  } // test checkBigEverythingIncluded()
 
   /**
-   * Randomly set new nodes and remove existing nodes in the SkipList. 
+   * Randomly set new nodes and remove existing nodes in the SkipList.
    */
   @Test
   public void randomSetandRemove() {
@@ -360,16 +360,20 @@ public class SkipListTests {
       int rand = random.nextInt(2);
       int randVal = random.nextInt(10000);
       ArrayList<Integer> arr = new ArrayList<Integer>();
+
+      // If generated 0 then set
       if (rand == 0) {
         set(randVal);
         arr.add(randVal);
       }
+
+      // If generated 1 then remove
       else {
         if (arr.size() <= 0) {
         } else {
-        int randInd = random.nextInt(arr.size() - 1);
-        remove(arr.get(randInd));
-        arr.remove(arr.get(randInd));
+          int randInd = random.nextInt(arr.size() - 1);
+          remove(arr.get(randInd));
+          arr.remove(arr.get(randInd));
         }
       }
     }
@@ -379,8 +383,8 @@ public class SkipListTests {
       dump(ints);
       System.err.println();
       fail("The instructions did not produce a sorted list.");
-    }
-  }
+    } // Make sure in order
+  } // test randomSetandRemove()
 
   /**
    * Add 50 nodes to the Skiplist and remvoe them all and check if its empty
@@ -393,21 +397,21 @@ public class SkipListTests {
       int rand = random.nextInt(200);
       set(rand);
       arr[i] = rand;
-    }
+    } // insert everything
     if (!inOrder(ints.keys())) {
       System.err.println("inOrder() failed in testOrdered()");
       printTest();
       dump(ints);
       System.err.println();
       fail("The instructions did not produce a sorted list.");
-    }
+    } // Make sure in order
     for (int i = 0; i < 50; i++) {
       remove(arr[i]);
-    }
+    } // remove everything
     if (ints.front.get(0) != null) {
       fail("The operation did not remove all the nodes.");
-    }
-  }
+    } // ensure SkipList is empty
+  } // test addThenRemoveTillEmpty()
 
   /**
    * Verify that a randomly created list contains all the values we added to the list.

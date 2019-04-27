@@ -1,35 +1,82 @@
 Length: 100
 
-Trial1
+Averages:
+SetAverage: 3
+GetAverage: 3
+RemAverage: 3
 
-SetExp:
-771
-GetExp:
-673
-RemoveExp:
-673
-
-Trial2
-
-SetExp:
-912
-GetExp:
-847
-RemoveExp:
-847
-
-Trial3
-
-SetExp:
-957
-GetExp:
-911
-RemoveExp:
-911
-
+Length: 200
 
 Averages:
-SetAverage: 880
-GetAverage: 810
-RemAverage: 810
+SetAverage: 4
+GetAverage: 4
+RemAverage: 4
 
+Length: 400
+
+Averages:
+SetAverage: 6
+GetAverage: 6
+RemAverage: 6
+
+Length: 800
+
+Averages:
+SetAverage: 6
+GetAverage: 6
+RemAverage: 6
+
+Length: 1600
+
+Averages:
+SetAverage: 8
+GetAverage: 7
+RemAverage: 8
+
+Length: 3200
+
+Averages:
+SetAverage: 7
+GetAverage: 8
+RemAverage: 8
+
+Length: 6400
+
+Averages:
+SetAverage: 8
+GetAverage: 9
+RemAverage: 9
+
+Length: 12800
+
+Averages:
+SetAverage: 9
+GetAverage: 10
+RemAverage: 10
+
+Length: 25600
+
+Averages:
+SetAverage: 10
+GetAverage: 10
+RemAverage: 11
+
+Length: 51200
+
+Averages:
+SetAverage: 11
+GetAverage: 12
+RemAverage: 12
+
+Length: 124000
+
+Averages:
+SetAverage: 14
+GetAverage: 15
+RemAverage: 15
+
+Although the inputs for the Array is doubled everytime. It appears as if
+the searching process is not even close to be doubled. Especially at a
+larger scale, the cost is barely increasing. Thus, we can see that a
+skiplist has O(logn) cost for its methods that involves searching (set,
+get, remove). 

@@ -87,7 +87,7 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
   // +-------------------+-------------------------------------------
   // | SimpleMap methods |
   // +-------------------+
-  
+
   /**
    * Inserts a node or changes the value of the node according to the provided key in the SkipList
    * 
@@ -96,9 +96,13 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
   @Override
   public V set(K key, V value) {
     stepCounter = 0;
+
+    // Null Pointer Exception if not fulfilling precondition
     if (key == null || value == null) {
       throw new NullPointerException();
     }
+
+    // When empty just insert a node
     if (this.size <= 0) {
       SLNode<K, V> newAdd = new SLNode<K, V>(key, value, randomHeight());
       for (int i = 0; i < newAdd.next.size(); i++) {
@@ -114,9 +118,13 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
       for (int i = 0; i < this.height; i++) {
         prevStorage.add(null);
       } // for
+
+      // Decide on the node to hop on
       while (level > 0 && (curr == null || comparator.compare(curr.key, key) > 0)) {
         curr = this.front.get(--level);
       }
+
+      // Check if the node that is matching the key
       if (comparator.compare(curr.key, key) == 0) {
         V rVal = curr.value;
         curr.value = value;
@@ -124,6 +132,8 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
       } else if (comparator.compare(curr.key, key) > 0) {
         level--;
       }
+
+      // Going into the main loop for search, if found, then just change the value
       while (level >= 0) {
         if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) > 0) {
           prevStorage.set(level, curr);
@@ -135,6 +145,8 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
           return curr.next(level).value;
         }
       }
+
+      // Insert the node
       SLNode<K, V> newAdd = new SLNode<K, V>(key, value, randomHeight());
       for (int i = 0; i < newAdd.next.size(); i++) {
         if (prevStorage.get(i) == null) {
@@ -155,15 +167,16 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
   } // set(K,V)
 
   /**
-   * Returns the value of a node given the key. However, 
-   * if the key doesn't match anything that exists in the 
-   * SkipList. 
+   * Returns the value of a node given the key. However, if the key doesn't match anything that
+   * exists in the SkipList.
    * 
    * @precondition: key cannot be null
    */
   @Override
   public V get(K key) {
     stepCounter = 0;
+
+    // Null Pointer Exception if not fulfilling precondition
     if (key == null) {
       throw new NullPointerException("null key");
     } // if
@@ -172,14 +185,21 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     }
     int level = height - 1;
     SLNode<K, V> curr = this.front.get(level);
+
+    // Decide on the node to hop on
     while (level > 0 && (curr == null || comparator.compare(curr.key, key) > 0)) {
       curr = this.front.get(--level);
     }
+
+    // If the node hopped on matches the key, then just return, if not then it isn't there(avoid
+    // while loop)
     if (comparator.compare(curr.key, key) == 0) {
       return curr.value;
     } else if (comparator.compare(curr.key, key) > 0) {
       level--;
     }
+
+    // Going into the main loop for search, if found, then just return the value
     while (level >= 0) {
       if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) > 0) {
         level--;
@@ -190,6 +210,8 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
         return curr.next(level).value;
       }
     }
+
+    // If not found, throw Exception
     throw new IndexOutOfBoundsException("OutOfBounds");
   } // get(K,V)
 
@@ -206,6 +228,8 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
    */
   @Override
   public boolean containsKey(K key) {
+
+    // Use get to check if the SkipList contains the key
     try {
       get(key);
       return true;
@@ -225,9 +249,13 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
   @Override
   public V remove(K key) {
     stepCounter = 0;
+
+    // Null Pointer Exception if not fulfilling precondition
     if (key == null) {
       throw new NullPointerException("null key");
     }
+
+    // Can't remove when empty
     if (size == 0) {
       return null;
     }
@@ -237,19 +265,25 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
     for (int i = 0; i < this.height; i++) {
       prevStorage.add(null);
     }
+
+    // Decide on the node to hop on
     while (level > 0 && (curr == null || comparator.compare(curr.key, key) >= 0)) {
       curr = this.front.get(--level);
     }
+
+    // If it still is bigger, then it doesn't exist.
+    // If it is equal, then connect the beginning to the removed's nexts.
     if (comparator.compare(curr.key, key) > 0) {
       return null;
-    }
-    else if (comparator.compare(curr.key, key) == 0) {
+    } else if (comparator.compare(curr.key, key) == 0) {
       for (int i = 0; i < curr.next.size(); i++) {
         this.front.set(i, curr.next(i));
       }
       size--;
       return curr.value;
     }
+
+    // Main while loop
     while (level >= 0) {
       if (curr.next(level) == null || comparator.compare(curr.next(level).key, key) >= 0) {
         prevStorage.set(level, curr);
@@ -259,6 +293,9 @@ public class SkipList<K, V> implements SimpleMap<K, V> {
         stepCounter++;
       }
     }
+
+    // Check whether if we found the node or not, if we did then remove it and connect the nodes
+    // around it.
     if (prevStorage.get(0).next(0) == null) {
       return null;
     } else if (comparator.compare(prevStorage.get(0).next(0).key, key) > 0) {
