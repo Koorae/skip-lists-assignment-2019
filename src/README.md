@@ -1,4 +1,8 @@
 Skip Lists Assignment
 =====================
+Ryuta Kure
 
-Some starter code for the skip list assignment.
+This is an assignment that implements SkipList. 
+
+Sources:
+N/A
